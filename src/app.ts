@@ -4,12 +4,14 @@ import { helpHandler } from './controllers/help';
 import { avatarHandler, avatarPathHandler, validFormats } from './controllers/avatar';
 import { getErrorSvg } from './utils/image/error';
 import { whitelistMiddleware } from './middleware/whitelist';
+import { rateLimitMiddleware } from './middleware/ratelimit';
 
 const app = new Koa();
 
 const enableHelp = process.env.ENABLE_HELP !== 'false';
 
 app.use(whitelistMiddleware);
+app.use(rateLimitMiddleware);
 
 app.use(async (ctx, next) => {
   if (ctx.path === '/help' && enableHelp) {

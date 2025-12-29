@@ -81,6 +81,8 @@ You can configure the server using environment variables.
 | `ALLOWED_ORIGINS` | Comma-separated list of allowed origins/referers. If set, requests with non-matching Origin/Referer headers will be blocked (403). | None (Allow all) |
 | `ALLOW_EMPTY_REFERER` | Allow requests with no Origin/Referer when `ALLOWED_ORIGINS` is set (`true`/`false`). | `true` |
 | `ENABLE_HELP` | Enable or disable the `/help` route (`true`/`false`). | `true` |
+| `RATELIMIT_MAX` | Max requests per window. If set (>0), rate limiting is enabled. | `0` (Disabled) |
+| `RATELIMIT_WINDOW` | Time window in milliseconds. | `60000` (1 minute) |
 
 ## Development
 

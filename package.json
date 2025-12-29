@@ -27,7 +27,9 @@
     "vue": "^3.5.26"
   },
   "dependencies": {
+    "@types/koa-ratelimit": "^5.0.5",
     "dotenv": "^17.2.3",
+    "koa-ratelimit": "^6.0.0",
     "sharp": "^0.34.5"
   }
 }
