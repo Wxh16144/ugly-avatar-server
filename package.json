@@ -1,0 +1,29 @@
+{
+  "name": "ugly-avatar-server",
+  "version": "1.0.0",
+  "description": "A server for generating ugly avatars",
+  "scripts": {
+    "start": "tsx src/app.ts"
+  },
+  "keywords": [
+    "ugly-avatar",
+    "avatar",
+    "generator"
+  ],
+  "author": "Wuxh <wxh16144@qq.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/koa": "^3.0.1",
+    "@types/node": "^25.0.3",
+    "@types/seedrandom": "^3.0.8",
+    "@vue/server-renderer": "^3.5.26",
+    "koa": "^3.1.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vue": "^3.5.26"
+  },
+  "dependencies": {
+    "seedrandom": "^3.0.5",
+    "sharp": "^0.34.5"
+  }
+}
