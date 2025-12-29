@@ -32,7 +32,7 @@ docker run -d -p 3000:3000 --name ugly-avatar wxh16144/ugly-avatar
 要在本地运行 Web 界面：
 
 ```bash
-pnpm --filter ugly-avatar-web dev
+pnpm web
 ```
 
 访问 `http://localhost:5173` (默认 Vite 端口) 使用画廊。
@@ -112,7 +112,7 @@ cp .env.example .env
 pnpm dev
 
 # 运行 Web 客户端开发模式
-pnpm --filter ugly-avatar-web dev
+pnpm web
 
 # 构建
 pnpm build

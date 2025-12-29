@@ -32,7 +32,7 @@ This project includes a web interface for generating, customizing, and downloadi
 To run the web interface locally:
 
 ```bash
-pnpm --filter ugly-avatar-web dev
+pnpm web
 ```
 
 Visit `http://localhost:5173` (default Vite port) to use the gallery.
@@ -112,7 +112,7 @@ cp .env.example .env
 pnpm dev
 
 # Run web client in development mode
-pnpm --filter ugly-avatar-web dev
+pnpm web
 
 # Build
 pnpm build

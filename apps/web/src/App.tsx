@@ -7,14 +7,13 @@ import { ImageWithSkeleton } from './components/ImageWithSkeleton'
 import { DebouncedInput } from './components/DebouncedInput'
 import { PowerOfTwoSlider } from './components/PowerOfTwoSlider'
 import { GridList, GridItem } from './components/GridComponents'
-
-
+import { DEFAULT_CONFIG } from './constants'
 
 function App() {
   const [query, setQuery] = useQueryParams({
-    format: withDefault(StringParam, 'webp'),
-    baseUrl: withDefault(StringParam, 'http://localhost:3000'),
-    size: withDefault(NumberParam, 128),
+    format: withDefault(StringParam, DEFAULT_CONFIG.format),
+    baseUrl: withDefault(StringParam, DEFAULT_CONFIG.baseUrl),
+    size: withDefault(NumberParam, DEFAULT_CONFIG.size),
     bg: StringParam,
   })
 
@@ -72,9 +71,9 @@ function App() {
 
   const reset = () => {
     setQuery({
-      format: 'webp',
-      baseUrl: 'http://localhost:3000',
-      size: 128,
+      format: DEFAULT_CONFIG.format,
+      baseUrl: DEFAULT_CONFIG.baseUrl,
+      size: DEFAULT_CONFIG.size,
       bg: undefined
     })
   }
