@@ -25,6 +25,18 @@ docker run -d -p 3000:3000 --name ugly-avatar wxh16144/ugly-avatar
 服务将在 `http://localhost:3000` 上可用。
 访问 `http://localhost:3000/help` 查看使用说明。
 
+## Web 界面
+
+本项目包含一个用于生成、定制和下载头像的 Web 界面。
+
+要在本地运行 Web 界面：
+
+```bash
+pnpm --filter ugly-avatar-web dev
+```
+
+访问 `http://localhost:5173` (默认 Vite 端口) 使用画廊。
+
 ## API 参考
 
 ### 端点
@@ -96,8 +108,11 @@ pnpm install
 # 复制环境变量文件
 cp .env.example .env
 
-# 运行开发模式
+# 运行服务端开发模式
 pnpm dev
+
+# 运行 Web 客户端开发模式
+pnpm --filter ugly-avatar-web dev
 
 # 构建
 pnpm build

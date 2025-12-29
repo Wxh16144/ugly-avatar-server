@@ -1,13 +1,48 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ugly Avatar Gallery</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<!--  Source Code: https://github.com/Wxh16144/ugly-avatar-server -->
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!--
+    Ugly Avatar Server Help
+    =======================
+
+    A server for generating ugly avatars.
+
+    Usage:
+
+    1. Basic Usage (Query Parameters):
+       GET /?id=anything&s=256&f=png
+
+       Parameters:
+       - id: (string) Seed for random generation. Defaults to random.
+       - s:  (int)    Size in pixels (16-2048). Default: 512.
+       - bg: (string) Background color (hex/name). Default: random.
+       - f:  (string) Format (png, jpeg, jpg, webp, avif, tiff, gif). Default: svg.
+
+    2. Path Usage:
+       GET /{id}.{format}
+
+       Examples:
+       - GET /hi.png
+       - GET /hi.svg
+       - GET /hi.jpg?s=100&bg=red
+
+       Note: Query parameters (s, bg, o) can also be used with path usage.
+
+    3. Help:
+       GET /help - Show this help message
+
+    -->
+  <title>Ugly Avatar Gallery</title>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>

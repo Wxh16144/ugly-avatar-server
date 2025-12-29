@@ -1,111 +1,18 @@
-import { useState, useEffect, useRef, forwardRef } from 'react'
+import { useState, useEffect } from 'react'
 import { useQueryParams, StringParam, NumberParam, withDefault } from 'use-query-params'
 import { VirtuosoGrid } from 'react-virtuoso'
 import { saveAs } from 'file-saver'
+import { generateIds } from './utils/random'
+import { ImageWithSkeleton } from './components/ImageWithSkeleton'
+import { DebouncedInput } from './components/DebouncedInput'
+import { PowerOfTwoSlider } from './components/PowerOfTwoSlider'
+import { GridList, GridItem } from './components/GridComponents'
 
-// Generate random ID
-const randomId = () => Math.random().toString(36).substring(7)
 
-// Generate a list of random IDs
-const generateIds = (count: number) => Array.from({ length: count }, () => randomId())
-
-const ImageWithSkeleton = ({ src, alt, className }: { src: string; alt: string; className?: string }) => {
-  const [loaded, setLoaded] = useState(false)
-  
-  // Reset loaded state when src changes
-  useEffect(() => {
-    setLoaded(false)
-  }, [src])
-
-  return (
-    <div className={`relative overflow-hidden bg-gray-100 ${className}`}>
-      {!loaded && (
-        <div className="absolute inset-0 skeleton-shimmer flex items-center justify-center z-10">
-          <svg className="w-8 h-8 text-gray-400 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-        </div>
-      )}
-      <img
-        src={src}
-        alt={alt}
-        className={`w-full h-full object-cover transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
-        onLoad={() => setLoaded(true)}
-        loading="lazy"
-      />
-    </div>
-  )
-}
-
-// Debounced Input Component
-// Note: We use setTimeout for debouncing instead of useTransition because useTransition 
-// is for CPU-bound updates, while here we want to prevent excessive network requests (IO-bound).
-const DebouncedInput = ({ 
-  value, 
-  onChange, 
-  debounce = 500,
-  ...props 
-}: { 
-  value: string | number | undefined;
-  onChange: (val: string) => void;
-  debounce?: number;
-} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'>) => {
-  const [localValue, setLocalValue] = useState<string | number | undefined>(value)
-  const isFirstRender = useRef(true)
-
-  useEffect(() => {
-    setLocalValue(value)
-  }, [value])
-
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false
-      return
-    }
-
-    const timer = setTimeout(() => {
-      if (localValue !== value) {
-        onChange(String(localValue || ''))
-      }
-    }, debounce)
-
-    return () => clearTimeout(timer)
-  }, [localValue, debounce]) // Intentionally omitting onChange/value to avoid loops, logic relies on localValue change
-
-  return (
-    <input
-      {...props}
-      value={localValue === undefined ? '' : localValue}
-      onChange={(e) => setLocalValue(e.target.value)}
-    />
-  )
-}
-
-const GridList = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ style, children, ...props }, ref) => (
-  <div
-    ref={ref}
-    {...props}
-    style={{
-      ...style,
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-      gap: '1.5rem',
-    }}
-    className="pb-8"
-  >
-    {children}
-  </div>
-))
-
-const GridItem = ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div {...props} style={{ padding: 0 }}>
-    {children}
-  </div>
-)
 
 function App() {
   const [query, setQuery] = useQueryParams({
-    format: withDefault(StringParam, 'svg'),
+    format: withDefault(StringParam, 'webp'),
     baseUrl: withDefault(StringParam, 'http://localhost:3000'),
     size: withDefault(NumberParam, 128),
     bg: StringParam,
@@ -165,7 +72,7 @@ function App() {
 
   const reset = () => {
     setQuery({
-      format: 'svg',
+      format: 'webp',
       baseUrl: 'http://localhost:3000',
       size: 128,
       bg: undefined
@@ -174,21 +81,23 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8 pb-80 md:pb-8">
-      <div className="max-w-7xl mx-auto h-full flex flex-col">
-        <header className="flex-shrink-0">
+      <div className="w-full mx-auto h-full flex flex-col">
+        <div className="flex-shrink-0 md:w-full md:max-w-7xl md:mx-auto">
           <h1 className="text-3xl font-bold text-gray-900 mb-6">Ugly Avatar Gallery</h1>
+        </div>
           
-          <div className="
-            fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-sm border-t border-gray-200 p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]
-            md:relative md:bottom-auto md:left-auto md:right-auto md:bg-white md:border md:shadow-sm md:rounded-lg md:p-6 md:mb-8 md:z-auto md:backdrop-blur-none
-          ">
+        <div className="
+          fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-sm border-t border-gray-200 p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]
+          md:sticky md:top-4 md:bottom-auto md:left-auto md:right-auto md:bg-white/90 md:border md:shadow-xl md:rounded-lg md:p-6 md:mb-8 md:z-30 md:backdrop-blur-md transition-all
+          md:w-full md:max-w-7xl md:mx-auto
+        ">
             <div className="flex justify-between items-center mb-4 md:hidden">
               <h2 className="font-bold text-gray-700">Configuration</h2>
               <button onClick={reset} className="text-sm text-indigo-600 font-medium">Reset</button>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 md:grid-cols-[2fr_1fr_1fr_1.5fr_auto] md:gap-6 items-end">
-              <div className="col-span-2 md:col-span-1">
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-[2fr_1fr_1fr_1.5fr_auto] md:gap-6 items-end">
+              <div className="md:col-span-1">
                 <label className="block text-sm font-medium text-gray-700 mb-2">Base URL</label>
                 <DebouncedInput
                   type="text"
@@ -214,17 +123,13 @@ function App() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Size (px)</label>
-                <DebouncedInput
-                  type="number"
+                <PowerOfTwoSlider
                   value={size}
-                  onChange={(val) => setQuery({ size: Number(val) })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  min="16"
-                  max="2048"
+                  onChange={(val) => setQuery({ size: val })}
                 />
               </div>
 
-              <div className="col-span-2 md:col-span-1">
+              <div className="md:col-span-1">
                 <label className="block text-sm font-medium text-gray-700 mb-2">Background</label>
                 <div className="flex gap-2">
                   <DebouncedInput
@@ -254,7 +159,7 @@ function App() {
               </div>
             </div>
           </div>
-        </header>
+        {/* </header> removed to allow sticky positioning */}
 
         <div className="flex-grow">
           <VirtuosoGrid

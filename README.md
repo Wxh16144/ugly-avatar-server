@@ -25,6 +25,18 @@ docker run -d -p 3000:3000 --name ugly-avatar wxh16144/ugly-avatar-server
 The server will be available at `http://localhost:3000`.
 Visit `http://localhost:3000/help` for usage instructions.
 
+## Web Interface
+
+This project includes a web interface for generating, customizing, and downloading avatars.
+
+To run the web interface locally:
+
+```bash
+pnpm --filter ugly-avatar-web dev
+```
+
+Visit `http://localhost:5173` (default Vite port) to use the gallery.
+
 ## API Reference
 
 ### Endpoints
@@ -96,8 +108,11 @@ pnpm install
 # Copy environment file
 cp .env.example .env
 
-# Run in development mode
+# Run server in development mode
 pnpm dev
+
+# Run web client in development mode
+pnpm --filter ugly-avatar-web dev
 
 # Build
 pnpm build
