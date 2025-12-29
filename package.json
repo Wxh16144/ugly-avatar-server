@@ -19,6 +19,8 @@
     "@types/node": "^25.0.3",
     "@types/seedrandom": "^3.0.8",
     "@vue/server-renderer": "^3.5.26",
+    "@types/koa-ratelimit": "^5.0.5",
+    "@types/koa__cors": "^5.0.1",
     "koa": "^3.1.1",
     "seedrandom": "^3.0.5",
     "tsdown": "^0.18.3",
@@ -28,8 +30,6 @@
   },
   "dependencies": {
     "@koa/cors": "^5.0.0",
-    "@types/koa-ratelimit": "^5.0.5",
-    "@types/koa__cors": "^5.0.1",
     "dotenv": "^17.2.3",
     "koa-ratelimit": "^6.0.0",
     "sharp": "^0.34.5"
