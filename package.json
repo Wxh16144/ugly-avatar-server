@@ -27,7 +27,9 @@
     "vue": "^3.5.26"
   },
   "dependencies": {
+    "@koa/cors": "^5.0.0",
     "@types/koa-ratelimit": "^5.0.5",
+    "@types/koa__cors": "^5.0.1",
     "dotenv": "^17.2.3",
     "koa-ratelimit": "^6.0.0",
     "sharp": "^0.34.5"

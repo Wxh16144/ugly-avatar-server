@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import Koa from 'koa';
+import cors from '@koa/cors';
 import { helpHandler } from './controllers/help';
 import { avatarHandler, avatarPathHandler, validFormats } from './controllers/avatar';
 import { getErrorSvg } from './utils/image/error';
@@ -15,6 +16,20 @@ if (process.env.TRUST_PROXY === 'true') {
 }
 
 const enableHelp = process.env.ENABLE_HELP !== 'false';
+
+// CORS Middleware
+app.use(cors({
+  origin: (ctx) => {
+    // If ALLOWED_ORIGINS is set, we could strictly return the origin if it matches,
+    // but whitelistMiddleware already handles the blocking logic.
+    // Here we just need to ensure that if the request is allowed, the browser gets the correct CORS header.
+    // Returning the request Origin allows the browser to process the response.
+    // If whitelistMiddleware blocks it later, the browser will receive 403 anyway.
+    const origin = ctx.get('Origin');
+    return origin || '*';
+  },
+  allowMethods: ['GET', 'HEAD', 'OPTIONS'],
+}));
 
 app.use(whitelistMiddleware);
 app.use(rateLimitMiddleware);
