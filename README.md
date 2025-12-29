@@ -83,6 +83,9 @@ You can configure the server using environment variables.
 | `ENABLE_HELP` | Enable or disable the `/help` route (`true`/`false`). | `true` |
 | `RATELIMIT_MAX` | Max requests per window. If set (>0), rate limiting is enabled. | `0` (Disabled) |
 | `RATELIMIT_WINDOW` | Time window in milliseconds. | `60000` (1 minute) |
+| `TRUST_PROXY` | Set to `true` if running behind a reverse proxy (Nginx, Cloudflare). **Required for rate limiting to work correctly.** | `false` |
+
+> **Important**: If you are deploying behind a reverse proxy (like Nginx, Cloudflare, or most Docker/Kubernetes setups), you **MUST** set `TRUST_PROXY=true`. Otherwise, rate limiting will block the proxy's IP, affecting all users.
 
 ## Development
 

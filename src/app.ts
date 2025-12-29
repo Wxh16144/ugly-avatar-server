@@ -8,6 +8,12 @@ import { rateLimitMiddleware } from './middleware/ratelimit';
 
 const app = new Koa();
 
+// Trust proxy if deployed behind a reverse proxy (Nginx, Cloudflare, etc.)
+// Required for rate limiting to work correctly when behind a proxy
+if (process.env.TRUST_PROXY === 'true') {
+  app.proxy = true;
+}
+
 const enableHelp = process.env.ENABLE_HELP !== 'false';
 
 app.use(whitelistMiddleware);
