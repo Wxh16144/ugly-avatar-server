@@ -1,5 +1,7 @@
 # Ugly Avatar Server
 
+[English](./README.md) | [中文](./README_zh.md)
+
 A server for generating ugly avatars.
 
 ## Features
@@ -10,9 +12,22 @@ A server for generating ugly avatars.
 - **Caching**: Implements strong caching (ETag, Cache-Control, No-Vary-Search) for performance.
 - **Error Handling**: Returns an error image instead of crashing or returning 500 text.
 
-## Usage
+## Getting Started
 
-### API Endpoints
+We recommend running the server using Docker.
+
+### Run with Docker
+
+```bash
+docker run -d -p 3000:3000 --name ugly-avatar wxh16144/ugly-avatar
+```
+
+The server will be available at `http://localhost:3000`.
+Visit `http://localhost:3000/help` for usage instructions.
+
+## API Reference
+
+### Endpoints
 
 #### 1. Generate Avatar (Query Parameters)
 
@@ -28,7 +43,7 @@ A server for generating ugly avatars.
 
 **Example:**
 
-```
+```txt
 GET /?id=user123&s=128&f=png
 ```
 
@@ -57,11 +72,23 @@ GET /user123.jpg?s=128&bg=red
 
 Returns a text file with usage instructions.
 
+## Configuration
+
+You can configure the server using environment variables.
+
+| Variable | Description | Default |
+| :--- | :--- | :--- |
+| `PORT` | The port to listen on. | `3000` |
+| `ALLOWED_ORIGINS` | Comma-separated list of allowed origins/referers. If set, requests with non-matching Origin/Referer headers will be blocked (403). | None (Allow all) |
+
 ## Development
 
 ```bash
 # Install dependencies
 pnpm install
+
+# Copy environment file
+cp .env.example .env
 
 # Run in development mode
 pnpm dev
@@ -71,18 +98,19 @@ pnpm build
 
 # Start production server
 pnpm start
+
+# Build Docker image locally
+docker build -t ugly-avatar-server .
+
+# Run local Docker image
+docker run -d -p 3000:3000 --name ugly-avatar-local ugly-avatar-server
 ```
+
+## Credits
+
+- Original implementation: [ugly-avatar](https://github.com/txstc55/ugly-avatar)
+- Code reference: [next-api-share](https://github.com/mamumu123/next-api-share)
 
 ## License
 
 MIT
-
-## How to Use
-
-### Self-Hosted
-
-```bash
-docker run -d -p 3000:3000 wxh16144/ugly-avatar-server
-```
-<!-- 提示用户打开 localhost:3000/help 查看帮助 -->
-Then open your browser and navigate to `http://localhost:3000/help` to see the help page.

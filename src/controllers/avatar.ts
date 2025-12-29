@@ -22,7 +22,7 @@ const generateAvatar = async (ctx: Context, params: AvatarParams) => {
   // Helper to return error image
   const returnError = async (msg: string) => {
     ctx.status = 200; // Return 200 to ensure image is displayed
-    const errorSvg = getErrorSvg(msg, defaultSize, defaultSize);
+    const errorSvg = getErrorSvg(msg, 256, 256);
     
     if (format && validFormats.includes(format)) {
       try {

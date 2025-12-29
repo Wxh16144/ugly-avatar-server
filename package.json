@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "A server for generating ugly avatars",
   "scripts": {
-    "start": "tsx src/app.ts"
+    "dev": "tsx watch src/app.ts",
+    "build": "tsdown",
+    "start": "node dist/app.cjs"
   },
   "keywords": [
     "ugly-avatar",
@@ -18,12 +20,14 @@
     "@types/seedrandom": "^3.0.8",
     "@vue/server-renderer": "^3.5.26",
     "koa": "^3.1.1",
+    "seedrandom": "^3.0.5",
+    "tsdown": "^0.18.3",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vue": "^3.5.26"
   },
   "dependencies": {
-    "seedrandom": "^3.0.5",
+    "dotenv": "^17.2.3",
     "sharp": "^0.34.5"
   }
 }
