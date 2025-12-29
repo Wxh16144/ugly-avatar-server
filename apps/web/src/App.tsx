@@ -1,0 +1,320 @@
+import { useState, useEffect, useRef, forwardRef } from 'react'
+import { useQueryParams, StringParam, NumberParam, withDefault } from 'use-query-params'
+import { VirtuosoGrid } from 'react-virtuoso'
+import { saveAs } from 'file-saver'
+
+// Generate random ID
+const randomId = () => Math.random().toString(36).substring(7)
+
+// Generate a list of random IDs
+const generateIds = (count: number) => Array.from({ length: count }, () => randomId())
+
+const ImageWithSkeleton = ({ src, alt, className }: { src: string; alt: string; className?: string }) => {
+  const [loaded, setLoaded] = useState(false)
+  
+  // Reset loaded state when src changes
+  useEffect(() => {
+    setLoaded(false)
+  }, [src])
+
+  return (
+    <div className={`relative overflow-hidden bg-gray-100 ${className}`}>
+      {!loaded && (
+        <div className="absolute inset-0 skeleton-shimmer flex items-center justify-center z-10">
+          <svg className="w-8 h-8 text-gray-400 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        </div>
+      )}
+      <img
+        src={src}
+        alt={alt}
+        className={`w-full h-full object-cover transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+        onLoad={() => setLoaded(true)}
+        loading="lazy"
+      />
+    </div>
+  )
+}
+
+// Debounced Input Component
+// Note: We use setTimeout for debouncing instead of useTransition because useTransition 
+// is for CPU-bound updates, while here we want to prevent excessive network requests (IO-bound).
+const DebouncedInput = ({ 
+  value, 
+  onChange, 
+  debounce = 500,
+  ...props 
+}: { 
+  value: string | number | undefined;
+  onChange: (val: string) => void;
+  debounce?: number;
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'>) => {
+  const [localValue, setLocalValue] = useState<string | number | undefined>(value)
+  const isFirstRender = useRef(true)
+
+  useEffect(() => {
+    setLocalValue(value)
+  }, [value])
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
+
+    const timer = setTimeout(() => {
+      if (localValue !== value) {
+        onChange(String(localValue || ''))
+      }
+    }, debounce)
+
+    return () => clearTimeout(timer)
+  }, [localValue, debounce]) // Intentionally omitting onChange/value to avoid loops, logic relies on localValue change
+
+  return (
+    <input
+      {...props}
+      value={localValue === undefined ? '' : localValue}
+      onChange={(e) => setLocalValue(e.target.value)}
+    />
+  )
+}
+
+const GridList = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ style, children, ...props }, ref) => (
+  <div
+    ref={ref}
+    {...props}
+    style={{
+      ...style,
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+      gap: '1.5rem',
+    }}
+    className="pb-8"
+  >
+    {children}
+  </div>
+))
+
+const GridItem = ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div {...props} style={{ padding: 0 }}>
+    {children}
+  </div>
+)
+
+function App() {
+  const [query, setQuery] = useQueryParams({
+    format: withDefault(StringParam, 'svg'),
+    baseUrl: withDefault(StringParam, 'http://localhost:3000'),
+    size: withDefault(NumberParam, 128),
+    bg: StringParam,
+  })
+
+  const { format, baseUrl, size, bg } = query
+  const [ids, setIds] = useState<string[]>([])
+
+  useEffect(() => {
+    setIds(generateIds(50))
+  }, [])
+
+  const loadMore = () => {
+    // Simulate network delay slightly to show loading state if needed, 
+    // but for local generation it's instant.
+    // Adding more items for infinite scroll
+    setTimeout(() => {
+      setIds(prev => [...prev, ...generateIds(20)])
+    }, 200)
+  }
+
+  const getImageUrl = (id: string) => {
+    let url = `${baseUrl}/${id}.${format}?s=${size}`
+    if (bg) {
+      url += `&bg=${encodeURIComponent(bg)}`
+    }
+    return url
+  }
+
+  const handleDownload = async (id: string) => {
+    const url = getImageUrl(id)
+    try {
+      const response = await fetch(url)
+      const blob = await response.blob()
+      saveAs(blob, `avatar-${id}.${format}`)
+    } catch (error) {
+      console.error('Download failed:', error)
+      // Fallback for simple download if fetch fails (e.g. CORS)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `avatar-${id}.${format}`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+    }
+  }
+
+  const handleCopy = async (id: string) => {
+    const url = getImageUrl(id)
+    try {
+      await navigator.clipboard.writeText(url)
+      // You might want to add a toast notification here in a real app
+    } catch (err) {
+      console.error('Failed to copy:', err)
+    }
+  }
+
+  const reset = () => {
+    setQuery({
+      format: 'svg',
+      baseUrl: 'http://localhost:3000',
+      size: 128,
+      bg: undefined
+    })
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-4 md:p-8 pb-80 md:pb-8">
+      <div className="max-w-7xl mx-auto h-full flex flex-col">
+        <header className="flex-shrink-0">
+          <h1 className="text-3xl font-bold text-gray-900 mb-6">Ugly Avatar Gallery</h1>
+          
+          <div className="
+            fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-sm border-t border-gray-200 p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]
+            md:relative md:bottom-auto md:left-auto md:right-auto md:bg-white md:border md:shadow-sm md:rounded-lg md:p-6 md:mb-8 md:z-auto md:backdrop-blur-none
+          ">
+            <div className="flex justify-between items-center mb-4 md:hidden">
+              <h2 className="font-bold text-gray-700">Configuration</h2>
+              <button onClick={reset} className="text-sm text-indigo-600 font-medium">Reset</button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-[2fr_1fr_1fr_1.5fr_auto] md:gap-6 items-end">
+              <div className="col-span-2 md:col-span-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Base URL</label>
+                <DebouncedInput
+                  type="text"
+                  value={baseUrl}
+                  onChange={(val) => setQuery({ baseUrl: val })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  placeholder="http://localhost:3000"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Format</label>
+                <select
+                  value={format}
+                  onChange={(e) => setQuery({ format: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+                  {['svg', 'png', 'jpg', 'webp', 'avif', 'gif'].map(f => (
+                    <option key={f} value={f}>{f.toUpperCase()}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Size (px)</label>
+                <DebouncedInput
+                  type="number"
+                  value={size}
+                  onChange={(val) => setQuery({ size: Number(val) })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  min="16"
+                  max="2048"
+                />
+              </div>
+
+              <div className="col-span-2 md:col-span-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Background</label>
+                <div className="flex gap-2">
+                  <DebouncedInput
+                    type="text"
+                    value={bg || ''}
+                    onChange={(val) => setQuery({ bg: val || undefined })}
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    placeholder="Random"
+                  />
+                  <DebouncedInput
+                    type="color"
+                    value={bg?.startsWith('#') ? bg : '#ffffff'}
+                    onChange={(val) => setQuery({ bg: val })}
+                    className="h-[42px] w-[42px] p-1 border border-gray-300 rounded-md cursor-pointer"
+                    debounce={200} // Faster debounce for color picker
+                  />
+                </div>
+              </div>
+
+              <div className="hidden md:block">
+                <button 
+                  onClick={reset} 
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                >
+                  Reset
+                </button>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <div className="flex-grow">
+          <VirtuosoGrid
+            useWindowScroll
+            totalCount={ids.length}
+            endReached={loadMore}
+            overscan={200}
+            components={{
+              List: GridList,
+              Item: GridItem,
+            }}
+            itemContent={(index) => {
+              const id = ids[index]
+              return (
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+                  <div className="aspect-square bg-gray-100 relative group">
+                    <ImageWithSkeleton
+                      src={getImageUrl(id)}
+                      alt={`Avatar ${id}`}
+                      className="w-full h-full"
+                    />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 gap-2 pointer-events-none md:pointer-events-auto">
+                      <span className="text-xs font-mono bg-white/90 px-2 py-1 rounded shadow-sm">{id}</span>
+                    </div>
+                    
+                    <div className="absolute bottom-2 right-2 flex gap-2 z-10 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleCopy(id)
+                        }}
+                        className="bg-white/90 p-2 rounded-full shadow-sm text-gray-700 hover:text-indigo-600 transition-colors"
+                        title="Copy URL"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleDownload(id)
+                        }}
+                        className="bg-white/90 p-2 rounded-full shadow-sm text-gray-700 hover:text-indigo-600 transition-colors"
+                        title="Download"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default App
