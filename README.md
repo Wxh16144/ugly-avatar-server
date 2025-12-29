@@ -79,6 +79,8 @@ You can configure the server using environment variables.
 | :--- | :--- | :--- |
 | `PORT` | The port to listen on. | `3000` |
 | `ALLOWED_ORIGINS` | Comma-separated list of allowed origins/referers. If set, requests with non-matching Origin/Referer headers will be blocked (403). | None (Allow all) |
+| `ALLOW_EMPTY_REFERER` | Allow requests with no Origin/Referer when `ALLOWED_ORIGINS` is set (`true`/`false`). | `true` |
+| `ENABLE_HELP` | Enable or disable the `/help` route (`true`/`false`). | `true` |
 
 ## Development
 

@@ -79,6 +79,8 @@ GET /user123.jpg?s=128&bg=red
 | :--- | :--- | :--- |
 | `PORT` | 监听端口。 | `3000` |
 | `ALLOWED_ORIGINS` | 允许的 Origin/Referer 列表（逗号分隔）。如果设置，不匹配 Origin/Referer 头部的请求将被阻止 (403)。 | 无 (允许所有) |
+| `ALLOW_EMPTY_REFERER` | 当设置了 `ALLOWED_ORIGINS` 时，是否允许没有 Origin/Referer 的请求 (`true`/`false`)。 | `true` |
+| `ENABLE_HELP` | 启用或禁用 `/help` 路由 (`true`/`false`)。 | `true` |
 
 ## 开发
 
