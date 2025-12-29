@@ -60,7 +60,8 @@ const generateAvatar = async (ctx: Context, params: AvatarParams) => {
     return returnError(`Invalid format: ${validFormats.join(', ')}`);
   }
 
-  const seed = (id || `${Math.random()}`);
+  const salt = process.env.AVATAR_SALT || '';
+  const seed = (id || `${Math.random()}`) + salt;
   const rng = seedrandom(seed);
   const width = size;
   const height = size;
@@ -111,7 +112,6 @@ export const avatarHandler = async (ctx: Context) => {
     id: (query.id as string) || (query.username as string) || "",
     bg: (query.bg as string) || "",
     s: (query.s as string) || "",
-    o: (query.o as string) || "1",
     f: (query.f as string) || "",
   });
 };
@@ -122,7 +122,6 @@ export const avatarPathHandler = async (ctx: Context, size: string, id: string, 
         id,
         bg: (query.bg as string) || "",
         s: size,
-        o: (query.o as string) || "1",
         f: format,
     });
 };

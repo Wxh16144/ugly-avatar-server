@@ -96,6 +96,7 @@ GET /user123.jpg?s=128&bg=red
 | `RATELIMIT_MAX` | 每个窗口的最大请求数。如果设置 (>0)，则启用限流。 | `0` (禁用) |
 | `RATELIMIT_WINDOW` | 时间窗口（毫秒）。 | `60000` (1 分钟) |
 | `TRUST_PROXY` | 如果在反向代理（Nginx, Cloudflare）后运行，设置为 `true`。**限流功能生效所必需。** | `false` |
+| `AVATAR_SALT` | 附加到种子（ID）后的字符串，用于改变生成结果。用于让你的实例生成的头像独一无二。 | 空字符串 |
 
 > **重要提示**: 如果你部署在反向代理（如 Nginx, Cloudflare 或大多数 Docker/Kubernetes 环境）之后，你**必须**设置 `TRUST_PROXY=true`。否则，限流功能将封禁代理服务器的 IP，导致所有用户受影响。
 
