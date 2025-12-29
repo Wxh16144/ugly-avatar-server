@@ -114,4 +114,4 @@ docker run -d -p 3000:3000 --name ugly-avatar-local ugly-avatar-server
 
 ## License
 
-MIT
+[MIT](./LICENSE)
