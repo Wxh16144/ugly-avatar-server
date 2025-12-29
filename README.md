@@ -8,7 +8,7 @@ A server for generating ugly avatars.
 
 - **Random Generation**: Generates unique ugly avatars based on a seed (ID).
 - **Multiple Formats**: Supports SVG, PNG, JPEG, WebP, AVIF, TIFF, GIF.
-- **Customizable**: Adjust size, background color, and opacity.
+- **Customizable**: Adjust size and background color.
 - **Caching**: Implements strong caching (ETag, Cache-Control, No-Vary-Search) for performance.
 - **Error Handling**: Returns an error image instead of crashing or returning 500 text.
 
@@ -38,7 +38,6 @@ Visit `http://localhost:3000/help` for usage instructions.
 | `id`      | string | Random  | Seed for random generation.                      |
 | `s`       | int    | 512     | Size in pixels (16-2048).                        |
 | `bg`      | string | Random  | Background color (e.g., `red`, `#ff0000`).       |
-| `o`       | float  | 1       | Opacity (0-1).                                   |
 | `f`       | string | svg     | Format: `png`, `jpeg`, `jpg`, `webp`, `avif`, `tiff`, `gif`. |
 
 **Example:**
@@ -56,7 +55,7 @@ GET /?id=user123&s=128&f=png
 | `id`      | Seed for random generation.                      |
 | `format`  | **Required**. `svg`, `png`, `jpeg`, `jpg`, `webp`, `avif`, `tiff`, `gif`. |
 
-*Note: You can still use query parameters `s`, `bg`, `o` to customize the output.*
+*Note: You can still use query parameters `s`, `bg` to customize the output.*
 
 **Examples:**
 

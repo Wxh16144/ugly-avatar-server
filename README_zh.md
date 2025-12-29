@@ -8,7 +8,7 @@
 
 - **随机生成**: 基于种子（ID）生成唯一的丑陋头像。
 - **多种格式**: 支持 SVG, PNG, JPEG, WebP, AVIF, TIFF, GIF。
-- **可定制**: 调整大小、背景颜色和透明度。
+- **可定制**: 调整大小和背景颜色。
 - **缓存**: 实现强缓存（ETag, Cache-Control, No-Vary-Search）以提高性能。
 - **错误处理**: 返回错误图片而不是崩溃或返回 500 文本。
 
@@ -38,7 +38,6 @@ docker run -d -p 3000:3000 --name ugly-avatar wxh16144/ugly-avatar
 | `id` | string | 随机 | 随机生成的种子。 |
 | `s` | int | 512 | 像素大小 (16-2048)。 |
 | `bg` | string | 随机 | 背景颜色 (例如 `red`, `#ff0000`)。 |
-| `o` | float | 1 | 透明度 (0-1)。 |
 | `f` | string | svg | 格式: `png`, `jpeg`, `jpg`, `webp`, `avif`, `tiff`, `gif`。 |
 
 **示例:**
@@ -56,7 +55,7 @@ GET /?id=user123&s=128&f=png
 | `id` | 随机生成的种子。 |
 | `format` | **必填**。`svg`, `png`, `jpeg`, `jpg`, `webp`, `avif`, `tiff`, `gif`。 |
 
-*注意：你仍然可以使用查询参数 `s`, `bg`, `o` 来定制输出。*
+*注意：你仍然可以使用查询参数 `s`, `bg` 来定制输出。*
 
 **示例:**
 

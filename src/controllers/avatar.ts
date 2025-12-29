@@ -12,12 +12,11 @@ interface AvatarParams {
   id: string;
   bg: string;
   s: string;
-  o: string;
   f: string;
 }
 
 const generateAvatar = async (ctx: Context, params: AvatarParams) => {
-  const { id, bg, s, o, f: format } = params;
+  const { id, bg, s, f: format } = params;
 
   // Helper to return error image
   const returnError = async (msg: string) => {
@@ -52,15 +51,6 @@ const generateAvatar = async (ctx: Context, params: AvatarParams) => {
     size = parsedSize;
   }
 
-  let opacity = 1;
-  if (o) {
-    const parsedOpacity = parseFloat(o);
-    if (isNaN(parsedOpacity) || parsedOpacity < 0 || parsedOpacity > 1) {
-      return returnError('Invalid opacity: 0-1');
-    }
-    opacity = parsedOpacity;
-  }
-
   if (format && !validFormats.includes(format)) {
     return returnError(`Invalid format: ${validFormats.join(', ')}`);
   }
@@ -71,7 +61,7 @@ const generateAvatar = async (ctx: Context, params: AvatarParams) => {
   const height = size;
 
   try {
-    const result = await getSvg({ rng, bgColor: bg, width, height, opacity });
+    const result = await getSvg({ rng, bgColor: bg, width, height });
     
     let finalBuffer: Buffer;
     let contentType: string;
@@ -90,7 +80,7 @@ const generateAvatar = async (ctx: Context, params: AvatarParams) => {
     // Cache Headers
     ctx.set('Cache-Control', 'public, max-age=31536000, immutable');
     // Ignore all query params except those that affect generation
-    ctx.set('No-Vary-Search', 'params, except=("s" "bg" "o" "f")');
+    ctx.set('No-Vary-Search', 'params, except=("s" "bg" "f")');
     
     // ETag
     const etag = crypto.createHash('md5').update(finalBuffer).digest('hex');

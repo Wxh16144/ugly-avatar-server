@@ -15,7 +15,6 @@ Usage:
    - id: (string) Seed for random generation. Defaults to random.
    - s:  (int)    Size in pixels (16-2048). Default: 512.
    - bg: (string) Background color (hex/name). Default: random.
-   - o:  (float)  Opacity (0-1). Default: 1.
    - f:  (string) Format (png, jpeg, jpg, webp, avif, tiff, gif). Default: svg.
 
 2. Path Usage:
@@ -26,7 +25,7 @@ Usage:
    - GET /hi.svg
    - GET /hi.jpg?s=100&bg=red
 
-   Note: Query parameters (s, bg, o) can also be used with path usage.
+   Note: Query parameters (s, bg) can also be used with path usage.
 
 3. Help:
    GET /help - Show this help message
