@@ -21,6 +21,11 @@ const generateAvatar = async (ctx: Context, params: AvatarParams) => {
   // Helper to return error image
   const returnError = async (msg: string) => {
     ctx.status = 200; // Return 200 to ensure image is displayed
+    // Prevent CDNs from caching error images
+    ctx.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    ctx.set('Pragma', 'no-cache');
+    ctx.set('Expires', '0');
+    
     const errorSvg = getErrorSvg(msg, 256, 256);
     
     if (format && validFormats.includes(format)) {
