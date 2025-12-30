@@ -13,10 +13,11 @@ interface AvatarParams {
   bg: string;
   s: string;
   f: string;
+  relevantQueryParams?: string[];
 }
 
 const generateAvatar = async (ctx: Context, params: AvatarParams) => {
-  const { id, bg, s, f: format } = params;
+  const { id, bg, s, f: format, relevantQueryParams } = params;
 
   // Helper to return error image
   const returnError = async (msg: string) => {
@@ -86,7 +87,11 @@ const generateAvatar = async (ctx: Context, params: AvatarParams) => {
     // Cache Headers
     ctx.set('Cache-Control', 'public, max-age=31536000, immutable');
     // Ignore all query params except those that affect generation
-    ctx.set('No-Vary-Search', 'params, except=("s" "bg" "f")');
+    const varyList = relevantQueryParams || ["id", "s", "bg", "f"];
+    const varyString = varyList.map(p => `"${p}"`).join(' ');
+    // https://mp.weixin.qq.com/s/IpMTER0XLbuxH-zEiPlLxA
+    ctx.set('No-Vary-Search', `params, except=(${varyString})`);
+    ctx.set('Vary', 'Accept-Encoding');
     
     // ETag
     const etag = crypto.createHash('md5').update(finalBuffer).digest('hex');
@@ -113,6 +118,7 @@ export const avatarHandler = async (ctx: Context) => {
     bg: (query.bg as string) || "",
     s: (query.s as string) || "",
     f: (query.f as string) || "",
+    relevantQueryParams: ["id", "s", "bg", "f"]
   });
 };
 
@@ -123,5 +129,7 @@ export const avatarPathHandler = async (ctx: Context, size: string, id: string, 
         bg: (query.bg as string) || "",
         s: size,
         f: format,
+        // For path-based requests, id and format are in the path, so we don't vary on them in query params
+        relevantQueryParams: ["s", "bg"]
     });
 };
