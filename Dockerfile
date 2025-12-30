@@ -6,12 +6,13 @@ WORKDIR /app
 # Install pnpm
 RUN npm install -g pnpm
 
-COPY package.json pnpm-lock.yaml ./
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
+COPY apps/web/package.json ./apps/web/
 RUN pnpm install --frozen-lockfile
 
 COPY . .
 RUN pnpm build
-RUN pnpm --filter ugly-avatar-web build
+RUN pnpm web:build
 
 # Runtime stage
 FROM node:20-alpine
@@ -22,7 +23,8 @@ WORKDIR /app
 RUN npm install -g pnpm
 
 # Copy package.json for dependencies
-COPY package.json pnpm-lock.yaml ./
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
+COPY apps/web/package.json ./apps/web/
 
 # Install production dependencies (sharp needs to be installed here)
 RUN pnpm install --prod --frozen-lockfile

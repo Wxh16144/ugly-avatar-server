@@ -29,13 +29,13 @@
     "tsdown": "^0.18.3",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "vue": "^3.5.26"
-  },
-  "dependencies": {
+    "vue": "^3.5.26",
     "@koa/cors": "^5.0.0",
     "dotenv": "^17.2.3",
     "koa-ratelimit": "^6.0.0",
-    "koa-static": "^5.0.0",
+    "koa-static": "^5.0.0"
+  },
+  "dependencies": {
     "sharp": "^0.34.5"
   }
 }

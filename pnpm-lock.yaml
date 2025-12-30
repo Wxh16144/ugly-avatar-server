@@ -8,22 +8,13 @@ importers:
 
   .:
     dependencies:
-      '@koa/cors':
-        specifier: ^5.0.0
-        version: 5.0.0
-      dotenv:
-        specifier: ^17.2.3
-        version: 17.2.3
-      koa-ratelimit:
-        specifier: ^6.0.0
-        version: 6.0.0
-      koa-static:
-        specifier: ^5.0.0
-        version: 5.0.0
       sharp:
         specifier: ^0.34.5
         version: 0.34.5
     devDependencies:
+      '@koa/cors':
+        specifier: ^5.0.0
+        version: 5.0.0
       '@types/koa':
         specifier: ^3.0.1
         version: 3.0.1
@@ -45,9 +36,18 @@ importers:
       '@vue/server-renderer':
         specifier: ^3.5.26
         version: 3.5.26(vue@3.5.26(typescript@5.9.3))
+      dotenv:
+        specifier: ^17.2.3
+        version: 17.2.3
       koa:
         specifier: ^3.1.1
         version: 3.1.1
+      koa-ratelimit:
+        specifier: ^6.0.0
+        version: 6.0.0
+      koa-static:
+        specifier: ^5.0.0
+        version: 5.0.0
       seedrandom:
         specifier: ^3.0.5
         version: 3.0.5
