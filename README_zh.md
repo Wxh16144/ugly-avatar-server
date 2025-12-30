@@ -20,7 +20,7 @@
 ### 使用 Docker 运行
 
 ```bash
-docker run -d -p 3000:3000 -p 3002:3002 --name ugly-avatar wxh16144/ugly-avatar
+docker run -d -p 3000:3000 -p 3002:3002 --name ugly-avatar wxh16144/ugly-avatar-server
 ```
 
 - 服务将在 http://localhost:3000 上可用。

@@ -20,7 +20,7 @@ We recommend running the server using Docker.
 ### Run with Docker
 
 ```bash
-docker run -d -p 3000:3000 -p 3002:3002 --name ugly-avatar wxh16144/ugly-avatar
+docker run -d -p 3000:3000 -p 3002:3002 --name ugly-avatar wxh16144/ugly-avatar-server
 ```
 
 - The server will be available at http://localhost:3000.
