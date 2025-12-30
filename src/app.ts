@@ -1,6 +1,9 @@
 import 'dotenv/config';
 import Koa from 'koa';
 import cors from '@koa/cors';
+import serve from 'koa-static';
+import path from 'path';
+import fs from 'fs';
 import { helpHandler } from './controllers/help';
 import { avatarHandler, avatarPathHandler, validFormats } from './controllers/avatar';
 import { getErrorSvg } from './utils/image/error';
@@ -80,3 +83,23 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
+// Web Server
+const webPort = process.env.WEB_PORT || 3002;
+// Try to find web dist path from env or default to ./public
+let webDistPath = process.env.WEB_DIST_PATH;
+if (!webDistPath) {
+  const defaultPath = path.join(process.cwd(), 'public');
+  if (fs.existsSync(defaultPath)) {
+    webDistPath = defaultPath;
+  }
+}
+
+if (webDistPath) {
+  const webApp = new Koa();
+  webApp.use(serve(path.resolve(webDistPath)));
+  
+  webApp.listen(webPort, () => {
+    console.log(`Web server running on port ${webPort}`);
+  });
+}

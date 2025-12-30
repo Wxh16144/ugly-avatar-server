@@ -19,11 +19,12 @@
 ### 使用 Docker 运行
 
 ```bash
-docker run -d -p 3000:3000 --name ugly-avatar wxh16144/ugly-avatar
+docker run -d -p 3000:3000 -p 3002:3002 --name ugly-avatar wxh16144/ugly-avatar
 ```
 
 服务将在 `http://localhost:3000` 上可用。
 访问 `http://localhost:3000/help` 查看使用说明。
+Web 界面将在 `http://localhost:3002` 上可用。
 
 ## Web 界面
 
@@ -97,6 +98,7 @@ GET /user123.jpg?s=128&bg=red
 | `RATELIMIT_WINDOW` | 时间窗口（毫秒）。 | `60000` (1 分钟) |
 | `TRUST_PROXY` | 如果在反向代理（Nginx, Cloudflare）后运行，设置为 `true`。**限流功能生效所必需。** | `false` |
 | `AVATAR_SALT` | 附加到种子（ID）后的字符串，用于改变生成结果。用于让你的实例生成的头像独一无二。 | 空字符串 |
+| `WEB_PORT` | Web 界面的端口。 | `3002` |
 
 > **重要提示**: 如果你部署在反向代理（如 Nginx, Cloudflare 或大多数 Docker/Kubernetes 环境）之后，你**必须**设置 `TRUST_PROXY=true`。否则，限流功能将封禁代理服务器的 IP，导致所有用户受影响。
 
@@ -125,7 +127,7 @@ pnpm start
 docker build -t ugly-avatar-server .
 
 # 运行本地 Docker 镜像
-docker run -d -p 3000:3000 --name ugly-avatar-local ugly-avatar-server
+docker run -d -p 3000:3000 -p 3002:3002 --name ugly-avatar-local ugly-avatar-server
 ```
 
 ## 致谢

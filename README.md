@@ -19,11 +19,12 @@ We recommend running the server using Docker.
 ### Run with Docker
 
 ```bash
-docker run -d -p 3000:3000 --name ugly-avatar wxh16144/ugly-avatar-server
+docker run -d -p 3000:3000 -p 3002:3002 --name ugly-avatar wxh16144/ugly-avatar
 ```
 
 The server will be available at `http://localhost:3000`.
 Visit `http://localhost:3000/help` for usage instructions.
+The web interface will be available at `http://localhost:3002`.
 
 ## Web Interface
 
@@ -97,6 +98,7 @@ You can configure the server using environment variables.
 | `RATELIMIT_WINDOW` | Time window in milliseconds. | `60000` (1 minute) |
 | `TRUST_PROXY` | Set to `true` if running behind a reverse proxy (Nginx, Cloudflare). **Required for rate limiting to work correctly.** | `false` |
 | `AVATAR_SALT` | A string appended to the seed (ID) to change the generation result. Useful for making your instance unique. | Empty string |
+| `WEB_PORT` | The port for the web interface. | `3002` |
 
 > **Important**: If you are deploying behind a reverse proxy (like Nginx, Cloudflare, or most Docker/Kubernetes setups), you **MUST** set `TRUST_PROXY=true`. Otherwise, rate limiting will block the proxy's IP, affecting all users.
 
@@ -125,7 +127,7 @@ pnpm start
 docker build -t ugly-avatar-server .
 
 # Run local Docker image
-docker run -d -p 3000:3000 --name ugly-avatar-local ugly-avatar-server
+docker run -d -p 3000:3000 -p 3002:3002 --name ugly-avatar-local ugly-avatar-server
 ```
 
 ## Credits

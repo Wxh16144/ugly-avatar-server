@@ -11,6 +11,7 @@ RUN pnpm install --frozen-lockfile
 
 COPY . .
 RUN pnpm build
+RUN pnpm --filter ugly-avatar-web build
 
 # Runtime stage
 FROM node:20-alpine
@@ -28,8 +29,10 @@ RUN pnpm install --prod --frozen-lockfile
 
 # Copy built file
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/apps/web/dist ./public
 
 ENV PORT=3000
 EXPOSE 3000
+EXPOSE 3002
 
 CMD ["node", "dist/app.cjs"]
