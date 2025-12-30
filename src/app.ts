@@ -97,6 +97,25 @@ if (!webDistPath) {
 
 if (webDistPath) {
   const webApp = new Koa();
+
+  // Serve dynamic config.js
+  webApp.use(async (ctx, next) => {
+    if (ctx.path === '/config.js') {
+      const apiPort = process.env.PORT || 3000;
+      // If API_BASE_URL is set, use it.
+      // Otherwise, construct a URL pointing to localhost with the correct port.
+      // Note: In a Docker environment with port mapping, 'localhost' might not be correct from the client's perspective
+      // if they are accessing from a different machine. But it's a reasonable default for local dev/testing.
+      // For production with custom domains/ports, API_BASE_URL should be set.
+      const baseUrl = process.env.API_BASE_URL || `http://localhost:${apiPort}`;
+      
+      ctx.type = 'application/javascript';
+      ctx.body = `window.UGLY_AVATAR_BASE_URL = "${baseUrl}";`;
+      return;
+    }
+    await next();
+  });
+
   webApp.use(serve(path.resolve(webDistPath)));
   
   webApp.listen(webPort, () => {

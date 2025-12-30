@@ -88,6 +88,7 @@ GET /user123.jpg?s=128&bg=red
 | `TRUST_PROXY` | 如果在反向代理（Nginx, Cloudflare）后运行，设置为 `true`。**限流功能生效所必需。** | `false` |
 | `AVATAR_SALT` | 附加到种子（ID）后的字符串，用于改变生成结果。用于让你的实例生成的头像独一无二。 | 空字符串 |
 | `WEB_PORT` | Web 界面的端口。 | `3002` |
+| `API_BASE_URL` | Web 界面使用的 API 服务器基础 URL。如果你在 Docker 中使用了自定义域名或端口映射，请设置此项。 | `http://localhost:3000` |
 
 > **重要提示**: 如果你部署在反向代理（如 Nginx, Cloudflare 或大多数 Docker/Kubernetes 环境）之后，你**必须**设置 `TRUST_PROXY=true`。否则，限流功能将封禁代理服务器的 IP，导致所有用户受影响。
 

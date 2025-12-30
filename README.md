@@ -88,6 +88,7 @@ You can configure the server using environment variables.
 | `TRUST_PROXY` | Set to `true` if running behind a reverse proxy (Nginx, Cloudflare). **Required for rate limiting to work correctly.** | `false` |
 | `AVATAR_SALT` | A string appended to the seed (ID) to change the generation result. Useful for making your instance unique. | Empty string |
 | `WEB_PORT` | The port for the web interface. | `3002` |
+| `API_BASE_URL` | The base URL of the API server used by the web interface. Set this if you are using a custom domain or port mapping in Docker. | `http://localhost:3000` |
 
 > **Important**: If you are deploying behind a reverse proxy (like Nginx, Cloudflare, or most Docker/Kubernetes setups), you **MUST** set `TRUST_PROXY=true`. Otherwise, rate limiting will block the proxy's IP, affecting all users.
 
