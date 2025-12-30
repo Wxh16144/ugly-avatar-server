@@ -23,9 +23,9 @@
 docker run -d -p 3000:3000 -p 3002:3002 --name ugly-avatar wxh16144/ugly-avatar
 ```
 
-服务将在 `http://localhost:3000` 上可用。
-Web 界面将在 `http://localhost:3002` 上可用。
-访问 `http://localhost:3000/help` 查看使用说明。
+- 服务将在 http://localhost:3000 上可用。
+- Web 界面将在 http://localhost:3002 上可用。
+- 访问 http://localhost:3000/help 查看使用说明。
 
 ## API 参考
 

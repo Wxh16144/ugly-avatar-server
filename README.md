@@ -23,9 +23,9 @@ We recommend running the server using Docker.
 docker run -d -p 3000:3000 -p 3002:3002 --name ugly-avatar wxh16144/ugly-avatar
 ```
 
-The server will be available at `http://localhost:3000`.
-The web interface will be available at `http://localhost:3002`.
-Visit `http://localhost:3000/help` for usage instructions.
+- The server will be available at http://localhost:3000.
+- The web interface will be available at http://localhost:3002.
+- Visit http://localhost:3000/help for usage instructions.
 
 ## API Reference
 
