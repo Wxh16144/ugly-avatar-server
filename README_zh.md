@@ -11,6 +11,7 @@
 - **可定制**: 调整大小和背景颜色。
 - **缓存**: 实现强缓存（ETag, Cache-Control, No-Vary-Search）以提高性能。
 - **错误处理**: 返回错误图片而不是崩溃或返回 500 文本。
+- **Web 界面**: 内置画廊用于浏览、定制和下载头像。
 
 ## 快速开始
 
@@ -23,20 +24,8 @@ docker run -d -p 3000:3000 -p 3002:3002 --name ugly-avatar wxh16144/ugly-avatar
 ```
 
 服务将在 `http://localhost:3000` 上可用。
-访问 `http://localhost:3000/help` 查看使用说明。
 Web 界面将在 `http://localhost:3002` 上可用。
-
-## Web 界面
-
-本项目包含一个用于生成、定制和下载头像的 Web 界面。
-
-要在本地运行 Web 界面：
-
-```bash
-pnpm web
-```
-
-访问 `http://localhost:5173` (默认 Vite 端口) 使用画廊。
+访问 `http://localhost:3000/help` 查看使用说明。
 
 ## API 参考
 

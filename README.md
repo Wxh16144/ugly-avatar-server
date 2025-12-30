@@ -11,6 +11,7 @@ A server for generating ugly avatars.
 - **Customizable**: Adjust size and background color.
 - **Caching**: Implements strong caching (ETag, Cache-Control, No-Vary-Search) for performance.
 - **Error Handling**: Returns an error image instead of crashing or returning 500 text.
+- **Web Interface**: Built-in gallery for browsing, customizing, and downloading avatars.
 
 ## Getting Started
 
@@ -23,20 +24,8 @@ docker run -d -p 3000:3000 -p 3002:3002 --name ugly-avatar wxh16144/ugly-avatar
 ```
 
 The server will be available at `http://localhost:3000`.
-Visit `http://localhost:3000/help` for usage instructions.
 The web interface will be available at `http://localhost:3002`.
-
-## Web Interface
-
-This project includes a web interface for generating, customizing, and downloading avatars.
-
-To run the web interface locally:
-
-```bash
-pnpm web
-```
-
-Visit `http://localhost:5173` (default Vite port) to use the gallery.
+Visit `http://localhost:3000/help` for usage instructions.
 
 ## API Reference
 
