@@ -4,6 +4,8 @@ import crypto from 'crypto';
 const HELP_TEXT = `Ugly Avatar Server Help
 =======================
 
+Source: https://github.com/Wxh16144/ugly-avatar-server
+
 A server for generating ugly avatars.
 
 Usage:

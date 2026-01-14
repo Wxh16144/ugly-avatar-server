@@ -1,6 +1,6 @@
 # Ugly Avatar Server
 
-[English](./README.md) | [中文](./README_zh.md)
+[English](./README.md) | 中文
 
 一个用于生成丑陋头像的服务。
 
@@ -73,7 +73,30 @@ GET /user123.jpg?s=128&bg=red
 
 返回包含使用说明的文本文件。
 
-## 配置
+## 命令行 (CLI) 使用
+
+- [ugly-avatar.plugin.zsh](./cli/ugly-avatar.plugin.zsh)（macOS/Linux）
+- [ugly-avatar.ps1](./cli/ugly-avatar.ps1)（Windows PowerShell）
+
+示例：`source ./cli/ugly-avatar.plugin.zsh`, 或者将函数添加到你的 PowerShell 配置文件中。
+
+**用法:**
+
+```bash
+# 下载随机头像
+ugly
+
+# 下载特定头像
+ugly -id my-avatar
+
+# 自定义大小和格式
+ugly -id my-avatar -size 100 -format svg
+
+# 批量下载 5 个头像
+for i in {1..5}; do ugly; done
+```
+
+## Configuration
 
 你可以通过环境变量配置服务器。
 

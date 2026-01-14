@@ -1,6 +1,6 @@
 # Ugly Avatar Server
 
-[English](./README.md) | [中文](./README_zh.md)
+English | [中文](./README_zh.md)
 
 A server for generating ugly avatars.
 
@@ -72,6 +72,41 @@ GET /user123.jpg?s=128&bg=red
 `GET /help`
 
 Returns a text file with usage instructions.
+
+## CLI Usage
+
+- `cli/ugly-avatar.plugin.zsh` (macOS/Linux)
+- `cli/ugly-avatar.ps1` (Windows PowerShell)
+
+Example (bash/zsh):
+
+```bash
+source ./cli/ugly-avatar.plugin.zsh
+
+# Download a random avatar
+ugly
+
+# Download a specific avatar
+ugly my-avatar
+
+# Custom size and format
+ugly my-avatar 100 svg
+
+# Batch download 5 avatars
+for i in {1..5}; do ugly; done
+
+# Use environment defaults (e.g., endpoint and transparent background)
+export UGLY_AVATAR_URL="https://api.example.com"
+export UGLY_AVATAR_BG="transparent"
+ugly
+```
+
+Example (PowerShell):
+
+```powershell
+. .\cli\ugly-avatar.ps1
+ugly -id my-id -size 256 -format png -bg '#ffcc00'
+```
 
 ## Configuration
 
