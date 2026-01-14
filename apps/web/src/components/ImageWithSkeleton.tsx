@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, CSSProperties } from 'react'
 
 export const ImageWithSkeleton = ({ src, alt, className }: { src: string; alt: string; className?: string }) => {
   const [loaded, setLoaded] = useState(false)
@@ -10,10 +10,19 @@ export const ImageWithSkeleton = ({ src, alt, className }: { src: string; alt: s
     setError(false)
   }, [src])
 
+  const [style] = useState(() => {
+    const duration = 1500
+    const offset = Date.now() % duration
+    return { '--skeleton-delay': `-${offset}ms` } as CSSProperties
+  })
+
   return (
     <div className={`relative overflow-hidden bg-gray-100 ${className}`}>
       {!loaded && !error && (
-        <div className="absolute inset-0 skeleton-shimmer flex items-center justify-center z-10">
+        <div 
+          className="absolute inset-0 skeleton-shimmer flex items-center justify-center z-10"
+          style={style}
+        >
           <svg className="w-8 h-8 text-gray-400 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>

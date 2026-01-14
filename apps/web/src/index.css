@@ -12,6 +12,7 @@
     );
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
+    animation-delay: var(--skeleton-delay, 0s);
   }
   
   @keyframes shimmer {
