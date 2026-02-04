@@ -19,6 +19,7 @@ function App() {
 
   const { format, baseUrl, size, bg } = query
   const [ids, setIds] = useState<string[]>([])
+  const [isConfigOpen, setIsConfigOpen] = useState(false)
 
   useEffect(() => {
     setIds(generateIds(50))
@@ -102,7 +103,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8 pb-80 md:pb-8">
+    <div className={`min-h-screen bg-gray-50 p-4 md:p-8 md:pb-8 ${isConfigOpen ? 'pb-96' : 'pb-24'}`}>
       <div className="w-full mx-auto h-full flex flex-col">
         <div className="flex-shrink-0 md:w-full md:max-w-7xl md:mx-auto">
           <h1 className="text-3xl font-bold text-gray-900 mb-6">Ugly Avatar Gallery</h1>
@@ -113,12 +114,33 @@ function App() {
           md:sticky md:top-4 md:bottom-auto md:left-auto md:right-auto md:bg-white/90 md:border md:shadow-xl md:rounded-lg md:p-6 md:mb-8 md:z-30 md:backdrop-blur-md transition-all
           md:w-full md:max-w-7xl md:mx-auto
         ">
-            <div className="flex justify-between items-center mb-4 md:hidden">
-              <h2 className="font-bold text-gray-700">Configuration</h2>
-              <button onClick={reset} className="text-sm text-indigo-600 font-medium">Reset</button>
+            <div 
+              className="flex justify-between items-center md:hidden cursor-pointer select-none"
+              onClick={() => setIsConfigOpen(!isConfigOpen)}
+            >
+              <h2 className="font-bold text-gray-700 flex items-center gap-2">
+                Configuration
+                <svg 
+                  className={`w-4 h-4 transition-transform ${isConfigOpen ? 'rotate-180' : ''}`} 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                </svg>
+              </h2>
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation()
+                  reset()
+                }} 
+                className="text-sm text-indigo-600 font-medium"
+              >
+                Reset
+              </button>
             </div>
 
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-[2fr_1fr_1fr_1.5fr_auto] md:gap-6 items-end">
+            <div className={`grid grid-cols-1 gap-3 md:grid-cols-[2fr_1fr_1fr_1.5fr_auto] md:gap-6 items-end ${isConfigOpen ? 'mt-4' : 'hidden md:grid'}`}>
               <div className="md:col-span-1">
                 <label className="block text-sm font-medium text-gray-700 mb-2">Base URL</label>
                 <DebouncedInput
