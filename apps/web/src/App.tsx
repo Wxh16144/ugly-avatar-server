@@ -43,16 +43,17 @@ function App() {
 
   const handleDownload = async (id: string) => {
     const url = getImageUrl(id)
+    const filename = `avatar-${id}-${size}.${format}`
     try {
       const response = await fetch(url)
       const blob = await response.blob()
-      saveAs(blob, `avatar-${id}.${format}`)
+      saveAs(blob, filename)
     } catch (error) {
       console.error('Download failed:', error)
       // Fallback for simple download if fetch fails (e.g. CORS)
       const a = document.createElement('a')
       a.href = url
-      a.download = `avatar-${id}.${format}`
+      a.download = filename
       document.body.appendChild(a)
       a.click()
       document.body.removeChild(a)
@@ -62,10 +63,32 @@ function App() {
   const handleCopy = async (id: string) => {
     const url = getImageUrl(id)
     try {
-      await navigator.clipboard.writeText(url)
-      // You might want to add a toast notification here in a real app
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(url)
+      } else {
+        throw new Error('Clipboard API not available')
+      }
     } catch (err) {
-      console.error('Failed to copy:', err)
+      console.error('Failed to copy, trying fallback:', err)
+      const textArea = document.createElement('textarea')
+      textArea.value = url
+      // Avoid scrolling to bottom
+      textArea.style.top = '0'
+      textArea.style.left = '0'
+      textArea.style.position = 'fixed'
+      textArea.style.opacity = '0'
+      
+      document.body.appendChild(textArea)
+      textArea.focus()
+      textArea.select()
+      
+      try {
+        document.execCommand('copy')
+      } catch (fallbackErr) {
+        console.error('Fallback copy failed:', fallbackErr)
+      }
+      
+      document.body.removeChild(textArea)
     }
   }
 
